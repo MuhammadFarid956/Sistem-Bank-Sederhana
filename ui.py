@@ -16,7 +16,7 @@ class BankSystem:
 
             new_account = accounts.Account(name, deposit)
             self.accounts[new_account.acc_num] = new_account
-            operational.BankStorage.save_data()
+            operational.BankStorage.save_data(self.accounts)
             print(f"Success: Account Created\nNumber Account : {new_account.acc_num}")
         except ValueError:
             print("Error: Invalid Input")
@@ -41,7 +41,7 @@ class BankSystem:
                 try:
                     amount = float(input("Enter Deposit amount : $"))
                     if acc.deposit(amount):
-                        operational.BankStorage.save_data()
+                        operational.BankStorage.save_data(self.accounts)
                         print(f"Success: Account Deposited\n Your Balance : {acc.acc_balance:.2f}")
                     else:
                         print("Amount Not Valid")
@@ -51,7 +51,7 @@ class BankSystem:
                 try:
                     amount = float(input("Enter Withdraw amount : $"))
                     if acc.withdraw(amount):
-                        operational.BankStorage.save_data()
+                        operational.BankStorage.save_data(self.accounts)
                     else:
                         print("Something went wrong")
                 except ValueError:
