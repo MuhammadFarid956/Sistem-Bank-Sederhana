@@ -25,6 +25,20 @@ class Account:
         print("Invalid withdrawal amount or insufficient founds")
         return False
 
+    def transfer(self, recipient, amount):
+        if recipient == self:
+            print("Error: Can't transfer to own account")
+            return
+        if amount <= 0:
+            print("Error: Transfer amount cannot be negative")
+            return
+        if self.withdraw(amount):
+            recipient.deposit(amount)
+            print(f"Transfer ${amount} to {recipient.acc_name} successful")
+        else:
+            print("Transfer Failed")
+
+
     def to_list(self): #Konversi data to CSV file
         return [self.acc_num, self.acc_name, self.acc_balance]
 
