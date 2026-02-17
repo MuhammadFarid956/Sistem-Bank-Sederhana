@@ -1,3 +1,5 @@
+import os.path
+import csv
 import accounts
 import operational
 
@@ -32,7 +34,7 @@ class BankSystem:
 
         while True:
             print(f"\nWelcome, {acc.acc_name}")
-            print(f"Balance : {acc.acc_balance:.2f}")
+            print(f"Balance : ${acc.acc_balance:.2f}")
             print("\n1. Deposit\n2. Withdraw\n3. Transfer\n4. Back")
 
             choice = input("Enter Choice : ")
@@ -73,10 +75,21 @@ class BankSystem:
             else:
                 print("Please Enter Valid Choice")
 
+    def view_transactions(self):
+        print("[ Transactions Report ]")
+        if not os.path.exists("transactions.csv"):
+            print("No transactions found")
+            return
+
+        with open("transactions.csv", 'r') as log:
+            reader = csv.reader(log)
+            for row in reader:
+                print(f"[{row[0]}] {row[1]} | Account : {row[2]} | Amount : ${row[3]} | {row[4]}")
+
     def run(self):
         while True:
             print("\n====== PYTHON BANK ======")
-            print(f"1. Create Account\n2. Access Account\n3. Exit\n")
+            print(f"1. Create Account\n2. Access Account\n3. Admin: View Transaction\n4. Exit\n")
 
             select = input("Enter Choice :")
 
@@ -85,6 +98,8 @@ class BankSystem:
             elif select == "2":
                 self.access_account()
             elif select == "3":
+                self.view_transactions()
+            elif select == "4":
                 print("Thank You.")
                 break
             else:

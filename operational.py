@@ -1,6 +1,7 @@
 import csv
 import os
-from accounts import Account
+from accounts import *
+import datetime
 
 FILENAME = "accounts_data.csv"
 
@@ -22,6 +23,18 @@ class BankStorage:
         except Exception as e:
             print(f"File not found: {e}")
             return{}
+
+    @staticmethod
+    def log_transaction(type_transaction, acc_num, amount, info=''):
+        file_log = "transactions.csv"
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        try:
+            with open(file_log, 'a', newline='') as log:
+                writer = csv.writer(log)
+                writer.writerow([timestamp, type_transaction, acc_num, amount, info ])
+        except Exception as e:
+            print(f"Cannot write log: {e}")
 
     @staticmethod
     def save_data(accounts_dict):

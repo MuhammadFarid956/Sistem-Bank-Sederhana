@@ -1,4 +1,6 @@
 import random
+import operational
+
 
 class Account:
     def __init__(self, account_name, initial_deposit, account_num= None):
@@ -13,6 +15,7 @@ class Account:
         if amount > 0:
             self.acc_balance += amount
             print(f"Deposited ${amount}. New balance : ${self.acc_balance:.2f}")
+            operational.BankStorage.log_transaction("DEPOSIT", self.acc_num, amount)
             return True
         print("Invalid deposit amount.")
         return False
@@ -21,6 +24,7 @@ class Account:
         if 0 < amount < self.acc_balance:
             self.acc_balance -= amount
             print(f"Withdrew ${amount}. New balance : ${self.acc_balance:.2f}")
+            operational.BankStorage.log_transaction("WITHDRAW", self.acc_num, amount)
             return True
         print("Invalid withdrawal amount or insufficient founds")
         return False
@@ -28,15 +32,18 @@ class Account:
     def transfer(self, amount, recipient):
         if recipient == self:
             print("Error: Can't transfer to own account")
-            return
+            return False
         if amount <= 0:
             print("Error: Transfer amount cannot be negative")
-            return
+            return False
         if self.withdraw(amount):
             recipient.deposit(amount)
             print(f"Transfer ${amount} to {recipient.acc_name} successful")
+            operational.BankStorage.log_transaction("TRANSFER_OUT", self.acc_num, amount)
+            return True
         else:
             print("Transfer Failed")
+            return False
 
 
     def to_list(self): #Konversi data to CSV file
